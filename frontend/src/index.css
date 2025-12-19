@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.nav-link:hover {
+  color: #387ED1 !important;
+}
+
+.footer-nav-link {
+  color: #6c757d;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 0.6rem;
+  color: rgba(0, 0, 0, 0.7);
+  transition: 0.2s;
+}
+
+.footer-nav-link:hover {
+    color:#387ED1; /* blue hover */
+}
+
+.linkColor {
+  color: #387ED1;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.product_left_section_text{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.product_left_section_text h1{
+  font-size: 1.9rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.product_left_section_text p{
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+  width: 93%;
+}
+
+.product_right_section_text{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 2rem;
+}
+
+.product_right_section_text h1{
+  font-size: 1.9rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.product_right_section_text p{
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+  width: 93%;
+}
+
+.btn-universe{
+  background-color: #387ED1;
+  color: white;
+  padding: 0.6rem 1.8rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border: none;
+}
+
+.btn-universe:hover{
+  background-color: #000000;
+  color: white;
+}
