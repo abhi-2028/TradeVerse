@@ -1,11 +1,11 @@
 import AppRoutes from "./AppRoutes";
-import { GeneralContextProvider } from "../context/GeneralContext";
+import { GeneralProvider } from "../context/GeneralContext";
 
 const Apps = () => {
   return (
-    <GeneralContextProvider>
+    <GeneralProvider>
       <AppRoutes />
-    </GeneralContextProvider>
+    </GeneralProvider>
   );
 };
 

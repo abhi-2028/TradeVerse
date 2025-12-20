@@ -1,15 +1,40 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Auth/Login";
 import Signup from "../pages/Auth/Signup";
+import { useGeneralContext } from "../context/GeneralContext";
 
 function AppRoutes() {
+  const { isAuthenticated, loading } = useGeneralContext();
+
+  if (loading) {
+    return <div>Checking authentication...</div>;
+  }
+
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      {/* <Route path="/dashboard/*" element={<Dashboard />} /> */}
+      {/* PROTECTED HOME */}
+      <Route
+        path="/"
+        element={
+          isAuthenticated ? <Home /> : <Navigate to="/login" replace />
+        }
+      />
+
+      {/* PUBLIC ROUTES */}
+      <Route
+        path="/login"
+        element={
+          isAuthenticated ? <Navigate to="/" replace /> : <Login />
+        }
+      />
+
+      <Route
+        path="/signup"
+        element={
+          isAuthenticated ? <Navigate to="/" replace /> : <Signup />
+        }
+      />
     </Routes>
   );
 }

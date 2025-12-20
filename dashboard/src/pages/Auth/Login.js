@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../styles/auth.css";
+import { useGeneralContext } from "../../context/GeneralContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const {authUser} = useGeneralContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -23,6 +25,7 @@ const Login = () => {
         { withCredentials: true }
       );
 
+      authUser();
       navigate("/");
     } catch (err) {
       if (err.response?.status === 400) {

@@ -1,37 +1,57 @@
-import React, { useState } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import axios from "axios";
 
-import BuyActionWindow from "../components/Modals/BuyActionWindow";
+// Create context
+const GeneralContext = createContext();
 
-const GeneralContext = React.createContext({
-  openBuyWindow: (uid) => {},
-  closeBuyWindow: () => {},
-});
+// Provider
+export const GeneralProvider = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-export const GeneralContextProvider = (props) => {
-  const [isBuyWindowOpen, setIsBuyWindowOpen] = useState(false);
-  const [selectedStockUID, setSelectedStockUID] = useState("");
-
-  const handleOpenBuyWindow = (uid) => {
-    setIsBuyWindowOpen(true);
-    setSelectedStockUID(uid);
+  // Verify user (auth check)
+  const verifyUser = async () => {
+    try {
+      await axios.get(
+        "http://localhost:3002/api/auth/user/verify",
+        { withCredentials: true }
+      );
+      setIsAuthenticated(true);
+    } catch (error) {
+      setIsAuthenticated(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleCloseBuyWindow = () => {
-    setIsBuyWindowOpen(false);
-    setSelectedStockUID("");
+  // Run once when app loads
+  useEffect(() => {
+    verifyUser();
+  }, []);
+
+  //set authenticated to true after login
+  const authUser = () => {
+    setIsAuthenticated(true);
+  };
+
+  // Global UI action (used in WatchList)
+  const openBuyWindow = (uid) => {
+    console.log("Buy clicked for:", uid);
   };
 
   return (
     <GeneralContext.Provider
       value={{
-        openBuyWindow: handleOpenBuyWindow,
-        closeBuyWindow: handleCloseBuyWindow,
+        isAuthenticated,
+        loading,
+        openBuyWindow,
+        authUser,
       }}
     >
-      {props.children}
-      {isBuyWindowOpen && <BuyActionWindow uid={selectedStockUID} />}
+      {children}
     </GeneralContext.Provider>
   );
 };
 
-export default GeneralContext;
+// Custom hook
+export const useGeneralContext = () => useContext(GeneralContext);
