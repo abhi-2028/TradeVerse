@@ -1,6 +1,7 @@
 const {HoldingsModel} = require("../model/HoldingsModel");
 const {PositionsModel} = require("../model/PositionsModel");
 const {OrdersModel} = require("../model/OrdersModel");
+const { WatchListModel } = require("../model/WatchListModel");
 
 async function allHoldings(req,res) {
      let allHoldings = await HoldingsModel.find({});
@@ -30,9 +31,17 @@ async function newOrder(req,res) {
     res.send("Order Saved!");
 }
 
+async function allWatchList(req,res) {
+    const userId = req.user.id;
+
+    const list = await WatchListModel.find({ user:userId });
+    res.json(list);
+}
+
 module.exports = {
     allHoldings,
     allPositions,
     allOrders,
-    newOrder
+    newOrder,
+    allWatchList
 }
