@@ -13,10 +13,12 @@ module.exports.OrdersSchema = new Schema({
     qty: {
         type: Number,
         required: true,
+        min:1
     },
     price: {
         type: Number,
         required: true,
+        min:0
     },
     mode: {
         type: String,

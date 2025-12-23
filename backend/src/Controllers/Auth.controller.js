@@ -79,7 +79,6 @@ module.exports.Login = async (req, res) => {
 module.exports.Logout = (req, res) => {
   try {
     res.clearCookie("token");
-    console.log("done")
     return res.status(200).json({
       message: "Logged out successfully",
     });
@@ -91,12 +90,22 @@ module.exports.Logout = (req, res) => {
   }
 };
 
-module.exports.VerifyLogin = (req,res) => {
-  res.status(200).json({
-    user: {
-      id: req.user._id,
-      email: req.user.email,
-      username: req.user.username,
-    },
-  });
-}
+module.exports.VerifyLogin = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.user.id).select("-password");
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      user: {
+        id: user._id,
+        email: user.email,
+        username: user.username,
+      },
+    });
+  } catch (error) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+};

@@ -1,51 +1,92 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 
-// Create context
 const GeneralContext = createContext();
 
-// Provider
 export const GeneralProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [authVerifying, setAuthVerifying] = useState(true);
+  const [buyStock, setBuyStock] = useState(null);
+  const [sellStock, setSellStock] = useState(null);
+  const [user, setUser] = useState(null);
 
-  // Verify user (auth check)
+  // 🔐 Verify auth on app load
   const verifyUser = async () => {
     try {
-      await axios.get(
+      const res = await axios.get(
         "http://localhost:3002/api/auth/user/verify",
         { withCredentials: true }
       );
+
+      setUser(res.data.user);
       setIsAuthenticated(true);
     } catch (error) {
+      setUser(null);
       setIsAuthenticated(false);
     } finally {
+      setAuthVerifying(false);
       setLoading(false);
     }
   };
 
-  // Run once when app loads
   useEffect(() => {
     verifyUser();
   }, []);
 
-  //set authenticated to true after login
-  const authUser = () => {
+  // Called after successful login
+  const authUser = (userData) => {
+    setUser(userData);
     setIsAuthenticated(true);
+    setAuthVerifying(false);
+    setLoading(false);
   };
 
-  // Global UI action (used in WatchList)
-  const openBuyWindow = (uid) => {
-    console.log("Buy clicked for:", uid);
+  // Logout
+  const logoutUser = async () => {
+    try {
+      await axios.post(
+        "http://localhost:3002/api/auth/user/logout",
+        {},
+        { withCredentials: true }
+      );
+    } catch (err) {
+      console.error("Logout failed", err);
+    } finally {
+      setUser(null);
+      setIsAuthenticated(false);
+      setAuthVerifying(false);
+      setLoading(false);
+    }
   };
+
+  // Buy window handlers
+  const openBuyWindow = (uid) => setBuyStock(uid);
+  const closeBuyWindow = () => setBuyStock(null);
+
+  // Sell window handlers
+  const openSellWindow = (uid) => setSellStock(uid);
+  const closeSellWindow = () => setSellStock(null);
+
+  if (loading || authVerifying) {
+    return null; // or a full-page loader
+  }
 
   return (
     <GeneralContext.Provider
       value={{
         isAuthenticated,
-        loading,
+        user,
+        buyStock,
+        sellStock,
         openBuyWindow,
+        closeBuyWindow,
+        openSellWindow,
+        closeSellWindow,
         authUser,
+        logoutUser,
+        loading,
+        authVerifying,
       }}
     >
       {children}
@@ -53,5 +94,4 @@ export const GeneralProvider = ({ children }) => {
   );
 };
 
-// Custom hook
 export const useGeneralContext = () => useContext(GeneralContext);

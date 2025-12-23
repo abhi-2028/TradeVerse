@@ -11,34 +11,33 @@ import {
 
 const WatchList = () => {
   const DEFAULT_WATCHLIST = [
-  { name: "INFY", price: 1450, percent: "+1.2%", isDown: false },
-  { name: "TCS", price: 3800, percent: "-0.4%", isDown: true },
-  { name: "RELIANCE", price: 2500, percent: "+0.9%", isDown: false },
-  { name: "NIFTY 50", price: 22400, percent: "+0.6%", isDown: false },
-];
+    { name: "INFY", price: 1450, percent: "+1.2%", isDown: false },
+    { name: "TCS", price: 3800, percent: "-0.4%", isDown: true },
+    { name: "RELIANCE", price: 2500, percent: "+0.9%", isDown: false },
+    { name: "NIFTY 50", price: 22400, percent: "+0.6%", isDown: false },
+  ];
+
   const [watchlist, setWatchlist] = useState(DEFAULT_WATCHLIST);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-  axios
-    .get("http://localhost:3002/api/user/watchlist")
-    .then((res) => {
-      if (res.data && res.data.length > 0) {
-        setWatchlist(res.data);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}, []);
-
+    axios
+      .get("http://localhost:3002/api/user/watchlist", { withCredentials: true })
+      .then((res) => {
+        if (res.data && res.data.length > 0) {
+          setWatchlist(res.data);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   const filteredList = watchlist.filter((stock) =>
     stock.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <>
     <div className="watchlist-container">
       <div className="search-container">
         <input
@@ -53,11 +52,10 @@ const WatchList = () => {
 
       <ul className="list">
         {filteredList.map((stock) => (
-          <WatchListItem key={stock._id || stock.name } stock={stock} />
+          <WatchListItem key={stock._id || stock.name} stock={stock} />
         ))}
       </ul>
     </div>
-    </>
   );
 };
 
@@ -76,13 +74,11 @@ const WatchListItem = ({ stock }) => {
 
         <div className="itemInfo">
           <span className="percent">{stock.percent}</span>
-
           {stock.isDown ? (
             <KeyboardArrowDown className="down" />
           ) : (
             <KeyboardArrowUp className="up" />
           )}
-
           <span className="price">{stock.price}</span>
         </div>
       </div>
@@ -92,24 +88,22 @@ const WatchListItem = ({ stock }) => {
   );
 };
 
-
 const WatchListActions = ({ stock }) => {
-  const { openBuyWindow } = useGeneralContext();
+  const { openBuyWindow, openSellWindow } = useGeneralContext();
 
   return (
     <span className="actions">
       <span>
         <Tooltip title="Buy" placement="top" arrow TransitionComponent={Grow}>
-          <button
-            className="buy"
-            onClick={() => openBuyWindow(stock.name)}
-          >
+          <button className="buy" onClick={() => openBuyWindow(stock.name)}>
             Buy
           </button>
         </Tooltip>
 
         <Tooltip title="Sell" placement="top" arrow TransitionComponent={Grow}>
-          <button className="sell">Sell</button>
+          <button className="sell" onClick={() => openSellWindow(stock.name)}>
+            Sell
+          </button>
         </Tooltip>
 
         <Tooltip title="Analytics" placement="top" arrow TransitionComponent={Grow}>

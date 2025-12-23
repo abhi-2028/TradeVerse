@@ -1,9 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import axios from "axios";
 
-import GeneralContext from "../../context/GeneralContext";
+import {useGeneralContext} from "../../context/GeneralContext";
 
 import "./BuyActionWindow.css";
 
@@ -11,19 +11,22 @@ const BuyActionWindow = ({ uid }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
   const [stockPrice, setStockPrice] = useState(0.0);
 
-  const generalContext = useContext(GeneralContext);
+  const generalContext = useGeneralContext();
 
   const handleBuyClick = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3002/newOrder", {
+      await axios.post("http://localhost:3002/api/user/new-order", {
         name: uid,
         qty: stockQuantity,
         price: stockPrice,
         mode: "BUY",
-      });
+      },
+    {
+      withCredentials:true
+    });
     } catch (err) {
-      console.error("Error sending order:", err);
+      console.log("Error sending order:", err);
     }
 
     generalContext.closeBuyWindow();

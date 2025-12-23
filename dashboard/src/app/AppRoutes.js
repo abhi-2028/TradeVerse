@@ -15,7 +15,7 @@ function AppRoutes() {
     <Routes>
       {/* PROTECTED HOME */}
       <Route
-        path="/"
+        path="/*"
         element={
           isAuthenticated ? <Home /> : <Navigate to="/login" replace />
         }
@@ -24,17 +24,15 @@ function AppRoutes() {
       {/* PUBLIC ROUTES */}
       <Route
         path="/login"
-        element={
-          isAuthenticated ? <Navigate to="/" replace /> : <Login />
-        }
+        element={isAuthenticated ? <Navigate to="/" replace /> : <Login />}
       />
-
       <Route
         path="/signup"
-        element={
-          isAuthenticated ? <Navigate to="/" replace /> : <Signup />
-        }
+        element={isAuthenticated ? <Navigate to="/" replace /> : <Signup />}
       />
+
+      {/* CATCH ALL */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
