@@ -95,13 +95,13 @@ const WatchListActions = ({ stock }) => {
     <span className="actions">
       <span>
         <Tooltip title="Buy" placement="top" arrow TransitionComponent={Grow}>
-          <button className="buy" onClick={() => openBuyWindow(stock.name)}>
+          <button className="buy" onClick={() => openBuyWindow(stock)}>
             Buy
           </button>
         </Tooltip>
 
         <Tooltip title="Sell" placement="top" arrow TransitionComponent={Grow}>
-          <button className="sell" onClick={() => openSellWindow(stock.name)}>
+          <button className="sell" onClick={() => openSellWindow(stock)}>
             Sell
           </button>
         </Tooltip>

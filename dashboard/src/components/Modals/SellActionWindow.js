@@ -1,39 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { useGeneralContext } from "../../context/GeneralContext";
 import "./SellActionWindow.css";
 
-const SellActionWindow = ({ uid }) => {
+const SellActionWindow = ({ uid, price }) => {
   const [qty, setQty] = useState(1);
-  const [price, setPrice] = useState(0);
+  const [sellPrice, setSellPrice] = useState(price);
 
   const { closeSellWindow } = useGeneralContext();
 
-  const handleSell = async (e) => {
+  useEffect(() => {
+    setSellPrice(price);
+  }, [price]);
+
+  const handleSellClick = async (e) => {
     e.preventDefault();
 
-    await axios.post(
-      "http://localhost:3002/api/user/new-order",
-      {
-        name: uid,
-        qty: Number(qty),
-        price: Number(price),
-        mode: "SELL",
-      },
-      { withCredentials: true }
-    );
+    try {
+      await axios.post(
+        "http://localhost:3002/api/user/new-order",
+        {
+          name: uid,
+          qty: Number(qty),
+          price: Number(sellPrice),
+          mode: "SELL",
+        },
+        { withCredentials: true }
+      );
+    } catch (err) {
+      console.error("Sell order failed:", err);
+    }
 
     closeSellWindow();
   };
 
+  const handleCancelClick = (e) => {
+    e.preventDefault();
+    closeSellWindow();
+  };
+
   return (
-    <div className="container">
+    <div className="container" id="sell-window" draggable="true">
       <h3 style={{ textAlign: "center" }}>Sell {uid}</h3>
 
       <div className="regular-order">
         <div className="inputs">
           <fieldset>
-            <legend>Qty</legend>
+            <legend>Qty.</legend>
             <input
               type="number"
               min="1"
@@ -46,18 +60,25 @@ const SellActionWindow = ({ uid }) => {
             <legend>Price</legend>
             <input
               type="number"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              value={sellPrice}
+              disabled
             />
           </fieldset>
         </div>
       </div>
 
       <div className="buttons">
-        <span>Amount credited after sell</span>
+        <span>
+          Amount credited ₹{(qty * sellPrice).toFixed(2)}
+        </span>
+
         <div>
-          <button className="btn btn-blue" onClick={handleSell}>Sell</button>
-          <button className="btn btn-grey" onClick={closeSellWindow}>Cancel</button>
+          <Link className="btn btn-blue" onClick={handleSellClick}>
+            Sell
+          </Link>
+          <Link className="btn btn-grey" onClick={handleCancelClick}>
+            Cancel
+          </Link>
         </div>
       </div>
     </div>

@@ -44,7 +44,7 @@ const Orders = () => {
             </thead>
             <tbody>
               {allOrders.map((order, index) => {
-                const color = order.mode === "BUY" ? "#d8ffc6ff" : "red";
+                const color = order.mode === "BUY" ? "#d8ffc6ff" : "#fc8484ce";
                 return (
                   <tr key={index} style={{ backgroundColor: color }}>
                     <td>{order.name}</td>

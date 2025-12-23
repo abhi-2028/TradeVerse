@@ -7,8 +7,10 @@ export const GeneralProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [authVerifying, setAuthVerifying] = useState(true);
+
   const [buyStock, setBuyStock] = useState(null);
   const [sellStock, setSellStock] = useState(null);
+
   const [user, setUser] = useState(null);
 
   // 🔐 Verify auth on app load
@@ -34,7 +36,6 @@ export const GeneralProvider = ({ children }) => {
     verifyUser();
   }, []);
 
-  // Called after successful login
   const authUser = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
@@ -42,7 +43,6 @@ export const GeneralProvider = ({ children }) => {
     setLoading(false);
   };
 
-  // Logout
   const logoutUser = async () => {
     try {
       await axios.post(
@@ -60,17 +60,14 @@ export const GeneralProvider = ({ children }) => {
     }
   };
 
-  // Buy window handlers
-  const openBuyWindow = (uid) => setBuyStock(uid);
+  // ✅ FIXED: store FULL stock object
+  const openBuyWindow = (stock) => setBuyStock(stock);
   const closeBuyWindow = () => setBuyStock(null);
 
-  // Sell window handlers
-  const openSellWindow = (uid) => setSellStock(uid);
+  const openSellWindow = (stock) => setSellStock(stock);
   const closeSellWindow = () => setSellStock(null);
 
-  if (loading || authVerifying) {
-    return null; // or a full-page loader
-  }
+  if (loading || authVerifying) return null;
 
   return (
     <GeneralContext.Provider
@@ -85,8 +82,6 @@ export const GeneralProvider = ({ children }) => {
         closeSellWindow,
         authUser,
         logoutUser,
-        loading,
-        authVerifying,
       }}
     >
       {children}

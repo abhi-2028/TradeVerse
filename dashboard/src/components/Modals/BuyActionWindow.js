@@ -1,73 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
 import axios from "axios";
-
-import {useGeneralContext} from "../../context/GeneralContext";
-
+import { useGeneralContext } from "../../context/GeneralContext";
 import "./BuyActionWindow.css";
 
-const BuyActionWindow = ({ uid }) => {
+const BuyActionWindow = ({ uid, price }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
-  const [stockPrice, setStockPrice] = useState(0.0);
+  const [stockPrice, setStockPrice] = useState(price);
 
-  const generalContext = useGeneralContext();
+  const { closeBuyWindow } = useGeneralContext();
+
+  useEffect(() => {
+    setStockPrice(price);
+  }, [price]);
 
   const handleBuyClick = async (e) => {
     e.preventDefault();
+
     try {
-      await axios.post("http://localhost:3002/api/user/new-order", {
-        name: uid,
-        qty: stockQuantity,
-        price: stockPrice,
-        mode: "BUY",
-      },
-    {
-      withCredentials:true
-    });
+      await axios.post(
+        "http://localhost:3002/api/user/new-order",
+        {
+          name: uid,
+          qty: Number(stockQuantity),
+          price: Number(stockPrice),
+          mode: "BUY",
+        },
+        { withCredentials: true }
+      );
     } catch (err) {
-      console.log("Error sending order:", err);
+      console.error("Error sending order:", err);
     }
 
-    generalContext.closeBuyWindow();
+    closeBuyWindow();
   };
 
   const handleCancelClick = (e) => {
     e.preventDefault();
-    generalContext.closeBuyWindow();
+    closeBuyWindow();
   };
 
   return (
     <div className="container" id="buy-window" draggable="true">
-      <h3 style={{padding:"auto 0" , textAlign:"center"}}>Buy {uid}</h3>
+      <h3 style={{ textAlign: "center" }}>Buy {uid}</h3>
+
       <div className="regular-order">
         <div className="inputs">
           <fieldset>
             <legend>Qty.</legend>
             <input
               type="number"
-              name="qty"
-              id="qty"
-              onChange={(e) => setStockQuantity(e.target.value)}
+              min="1"
               value={stockQuantity}
+              onChange={(e) => setStockQuantity(e.target.value)}
             />
           </fieldset>
+
           <fieldset>
             <legend>Price</legend>
             <input
               type="number"
-              name="price"
-              id="price"
-              step={stockPrice}
-              onChange={(e) => setStockPrice(e.target.value)}
               value={stockPrice}
+              disabled
             />
           </fieldset>
         </div>
       </div>
 
       <div className="buttons">
-        <span>Margin required ₹140.65</span>
+        <span>
+          Margin required ₹{(stockQuantity * stockPrice).toFixed(2)}
+        </span>
         <div>
           <Link className="btn btn-blue" onClick={handleBuyClick}>
             Buy

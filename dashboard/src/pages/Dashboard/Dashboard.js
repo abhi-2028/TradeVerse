@@ -7,19 +7,34 @@ import Orders from "./Orders";
 import Positions from "./Positions";
 import Summary from "./Summary";
 import WatchList from "./WatchList";
+
 import BuyActionWindow from "../../components/Modals/BuyActionWindow";
+import SellActionWindow from "../../components/Modals/SellActionWindow";
 
 import { GeneralProvider, useGeneralContext } from "../../context/GeneralContext";
 
 const DashboardLayout = () => {
-  const { buyStock } = useGeneralContext();
+  const { buyStock, sellStock } = useGeneralContext();
 
   return (
     <div className="dashboard-container">
       <WatchList />
 
       {/* ✅ BUY WINDOW */}
-      {buyStock && <BuyActionWindow uid={buyStock} />}
+      {buyStock && (
+        <BuyActionWindow
+          uid={buyStock.name}
+          price={buyStock.price}
+        />
+      )}
+
+      {/* ✅ SELL WINDOW */}
+      {sellStock && (
+        <SellActionWindow
+          uid={sellStock.name}
+          price={sellStock.price}
+        />
+      )}
 
       <div className="content">
         <Routes>
