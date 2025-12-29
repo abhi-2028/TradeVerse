@@ -129,10 +129,10 @@ const qtyData = {
         </div>
       </div>
 
-      
-      <VerticalGraph data={priceData}/>
+
+      {allHoldings.length > 0 && <VerticalGraph data={priceData}/>}
       <br></br>
-      <VerticalGraph data={qtyData}/>
+      {allHoldings.length > 0 && <VerticalGraph data={qtyData}/>}
     </>
   );
 };

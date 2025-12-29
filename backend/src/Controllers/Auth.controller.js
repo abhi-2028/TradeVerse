@@ -9,7 +9,7 @@ module.exports.Signup = async (req, res) => {
     const existingUser = await UserModel.findOne({ email });
 
     if (existingUser) {
-      return res.status(409).json({message: "User already exists" });
+      return res.status(409).json({ message: "User already exists" });
     }
 
     const user = await UserModel.create({
@@ -19,13 +19,17 @@ module.exports.Signup = async (req, res) => {
     })
 
     const token = jwt.sign({
-        id: user._id
+      id: user._id
     }, process.env.TOKEN_KEY,
-  {
-    expiresIn: "3d"
-  })
+      {
+        expiresIn: "3d"
+      })
 
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+    });
 
     return res.status(201).json({
       message: "User signed up successfully",
@@ -57,18 +61,22 @@ module.exports.Login = async (req, res) => {
     }
 
     const token = jwt.sign({
-        id: user._id
+      id: user._id
     }, process.env.TOKEN_KEY)
 
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+    });
 
     res.status(200).json({
-        message: "User logged in successfully",
-        user: {
-            id: user._id,
-            username: user.username,
-            email: user.email
-        }
+      message: "User logged in successfully",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      }
     });
   } catch (error) {
     console.error(error);
@@ -78,16 +86,16 @@ module.exports.Login = async (req, res) => {
 
 module.exports.Logout = (req, res) => {
   try {
-    res.clearCookie("token");
-    return res.status(200).json({
-      message: "Logged out successfully",
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
     });
-  } catch (error) {
-    console.log(error)
-    return res.status(500).json({
-      message: "Logout failed",
-    });
-  }
+
+    res.status(200).json({ message: "Logged out successfully" });
+} catch (error) {
+  return res.status(500).json({ message: "Logout failed" });
+}
 };
 
 module.exports.VerifyLogin = async (req, res) => {
