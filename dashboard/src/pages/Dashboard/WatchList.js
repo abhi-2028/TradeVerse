@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { apiUrl } from "../../config";
 import { Tooltip, Grow } from "@mui/material";
 import { useGeneralContext } from "../../context/GeneralContext";
 import {
@@ -22,7 +23,7 @@ const WatchList = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}api/user/watchlist`, { withCredentials: true })
+      .get(apiUrl('/api/user/watchlist'), { withCredentials: true })
       .then((res) => {
         if (res.data && res.data.length > 0) {
           setWatchlist(res.data);

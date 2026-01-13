@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { apiUrl } from "../../config";
 import { useGeneralContext } from "../../context/GeneralContext";
 import "./BuyActionWindow.css";
 
@@ -19,7 +20,7 @@ const BuyActionWindow = ({ uid, price }) => {
 
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}api/user/new-order`,
+        apiUrl('/api/user/new-order'),
         {
           name: uid,
           qty: Number(stockQuantity),

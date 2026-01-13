@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import axios from "axios";
+import { apiUrl } from "../../config";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/auth.css";
 import { useGeneralContext } from "../../context/GeneralContext";
@@ -20,7 +21,7 @@ const Signup = () => {
     const data = Object.fromEntries(formData.entries())
 
     try{
-      await axios.post(`${process.env.REACT_APP_API_URL}api/auth/user/signup`,
+      await axios.post(apiUrl('/api/auth/user/signup'),
         data,{withCredentials: true}
       );
 

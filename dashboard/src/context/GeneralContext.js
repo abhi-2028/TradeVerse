@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { apiUrl } from "../config";
 
 // ✅ GLOBAL AXIOS CONFIG (runs once)
 axios.defaults.withCredentials = true;
@@ -18,9 +19,7 @@ export const GeneralProvider = ({ children }) => {
   // 🔐 Verify user on app load
   const verifyUser = async () => {
     try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}api/auth/user/verify`
-      );
+      const res = await axios.get(apiUrl("/api/auth/user/verify"));
 
       setUser(res.data.user);
       setIsAuthenticated(true);
@@ -53,7 +52,7 @@ export const GeneralProvider = ({ children }) => {
   const logoutUser = async () => {
     try {
       // backend exposes GET /logout — use GET to clear the cookie correctly
-      await axios.get(`${process.env.REACT_APP_API_URL}api/auth/user/logout`, { withCredentials: true });
+      await axios.get(apiUrl("/api/auth/user/logout"), { withCredentials: true });
     } catch (err) {
       console.error("Logout failed", err);
     } finally {

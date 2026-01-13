@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
+import { apiUrl } from "../../config";
 import { VerticalGraph } from "../../components/Charts/VerticalGraph";
 
 const Holdings = () => {
@@ -7,7 +8,7 @@ const Holdings = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}api/user/holdings`, {
+      .get(apiUrl('/api/user/holdings'), {
         withCredentials: true,
       })
       .then((res) => {

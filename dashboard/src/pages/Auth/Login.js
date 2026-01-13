@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { apiUrl } from "../../config";
 import "../../styles/auth.css";
 import { useGeneralContext } from "../../context/GeneralContext";
 
@@ -20,7 +21,7 @@ const Login = () => {
 
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}api/auth/user/login`,
+        apiUrl('/api/auth/user/login'),
         data,
         { withCredentials: true }
       );

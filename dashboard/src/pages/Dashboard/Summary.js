@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { apiUrl } from "../../config";
 
 const Summary = () => {
   const [data, setData] = useState(null);
@@ -9,7 +10,7 @@ const Summary = () => {
     const fetchSummary = async () => {
       try {
         const res = await axios.get(
-          `${process.env.REACT_APP_API_URL}api/user/summary`,
+          apiUrl('/api/user/summary'),
           { withCredentials: true }
         );
         setData(res.data);
