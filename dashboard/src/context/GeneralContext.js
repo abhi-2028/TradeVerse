@@ -1,6 +1,9 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 
+// ✅ GLOBAL AXIOS CONFIG (runs once)
+axios.defaults.withCredentials = true;
+
 const GeneralContext = createContext();
 
 export const GeneralProvider = ({ children }) => {
@@ -10,15 +13,13 @@ export const GeneralProvider = ({ children }) => {
 
   const [buyStock, setBuyStock] = useState(null);
   const [sellStock, setSellStock] = useState(null);
-
   const [user, setUser] = useState(null);
 
-  // 🔐 Verify auth on app load
+  // 🔐 Verify user on app load
   const verifyUser = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:3002/api/auth/user/verify",
-        { withCredentials: true }
+        "http://localhost:3002/api/auth/user/verify"
       );
 
       setUser(res.data.user);
@@ -37,19 +38,22 @@ export const GeneralProvider = ({ children }) => {
   }, []);
 
   const authUser = (userData) => {
-    setUser(userData);
-    setIsAuthenticated(true);
-    setAuthVerifying(false);
-    setLoading(false);
+    if (userData) {
+      setUser(userData);
+      setIsAuthenticated(true);
+      setAuthVerifying(false);
+      setLoading(false);
+      return Promise.resolve();
+    } else {
+      // If no userData provided, re-verify from server (useful after login)
+      return verifyUser();
+    }
   };
 
   const logoutUser = async () => {
     try {
-      await axios.post(
-        "http://localhost:3002/api/auth/user/logout",
-        {},
-        { withCredentials: true }
-      );
+      // backend exposes GET /logout — use GET to clear the cookie correctly
+      await axios.get("http://localhost:3002/api/auth/user/logout", { withCredentials: true });
     } catch (err) {
       console.error("Logout failed", err);
     } finally {
@@ -60,7 +64,6 @@ export const GeneralProvider = ({ children }) => {
     }
   };
 
-  // ✅ FIXED: store FULL stock object
   const openBuyWindow = (stock) => setBuyStock(stock);
   const closeBuyWindow = () => setBuyStock(null);
 

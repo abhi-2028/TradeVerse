@@ -8,8 +8,7 @@ const Menu = () => {
   const { user, isAuthenticated, logoutUser } = useGeneralContext();
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
-  const handleProfileClick = () =>
-    setIsProfileDropdownOpen((prev) => !prev);
+  const handleProfileClick = () => setIsProfileDropdownOpen((prev) => !prev);
 
   const handleLogout = async () => {
     await logoutUser();
@@ -26,9 +25,7 @@ const Menu = () => {
   ];
 
   const isActive = (path) =>
-    path === "/"
-      ? location.pathname === "/"
-      : location.pathname.startsWith(path);
+    path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
 
   // Safe initials calculation
   const initials =
@@ -48,10 +45,12 @@ const Menu = () => {
         <ul>
           {menuItems.map((item) => (
             <li key={item.path}>
-              <Link to={item.path} style={{ textDecoration: "none" }}>
-                <p className={isActive(item.path) ? "menu selected" : "menu"}>
-                  {item.name}
-                </p>
+              <Link
+                to={item.path}
+                className={isActive(item.path) ? "menu selected" : "menu"}
+                style={{ textDecoration: "none" }}
+              >
+                {item.name}
               </Link>
             </li>
           ))}
@@ -59,9 +58,12 @@ const Menu = () => {
 
         <hr />
 
-        {/* Profile (auth already verified) */}
         {isAuthenticated && user && (
-          <div className="profile" onClick={handleProfileClick}>
+          <div
+            className="profile"
+            onClick={handleProfileClick}
+            style={{ cursor: "pointer" }}
+          >
             <div className="avatar">{initials}</div>
             <p className="username">{user.username}</p>
 
@@ -71,10 +73,7 @@ const Menu = () => {
                   <li>
                     <Link to="/profile">Profile</Link>
                   </li>
-                  <li
-                    onClick={handleLogout}
-                    style={{ cursor: "pointer" }}
-                  >
+                  <li onClick={handleLogout} style={{ cursor: "pointer" }}>
                     Logout
                   </li>
                 </ul>

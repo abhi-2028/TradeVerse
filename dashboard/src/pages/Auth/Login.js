@@ -25,7 +25,8 @@ const Login = () => {
         { withCredentials: true }
       );
 
-      authUser();
+      // After successful login, fetch and set the user in context so UI updates immediately
+      await authUser();
       navigate("/");
     } catch (err) {
       if (err.response?.status === 400) {
