@@ -19,7 +19,7 @@ export const GeneralProvider = ({ children }) => {
   const verifyUser = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:3002/api/auth/user/verify"
+        `${process.env.REACT_APP_API_URL}api/auth/user/verify`
       );
 
       setUser(res.data.user);
@@ -53,7 +53,7 @@ export const GeneralProvider = ({ children }) => {
   const logoutUser = async () => {
     try {
       // backend exposes GET /logout — use GET to clear the cookie correctly
-      await axios.get("http://localhost:3002/api/auth/user/logout", { withCredentials: true });
+      await axios.get(`${process.env.REACT_APP_API_URL}api/auth/user/logout`, { withCredentials: true });
     } catch (err) {
       console.error("Logout failed", err);
     } finally {

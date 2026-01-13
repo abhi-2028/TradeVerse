@@ -9,7 +9,7 @@ const Summary = () => {
     const fetchSummary = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3002/api/user/summary",
+          `${process.env.REACT_APP_API_URL}api/user/summary`,
           { withCredentials: true }
         );
         setData(res.data);

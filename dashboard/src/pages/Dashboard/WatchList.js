@@ -22,7 +22,7 @@ const WatchList = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3002/api/user/watchlist", { withCredentials: true })
+      .get(`${process.env.REACT_APP_API_URL}api/user/watchlist`, { withCredentials: true })
       .then((res) => {
         if (res.data && res.data.length > 0) {
           setWatchlist(res.data);

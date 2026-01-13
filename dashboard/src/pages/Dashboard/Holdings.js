@@ -7,7 +7,7 @@ const Holdings = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3002/api/user/holdings", {
+      .get(`${process.env.REACT_APP_API_URL}api/user/holdings`, {
         withCredentials: true,
       })
       .then((res) => {

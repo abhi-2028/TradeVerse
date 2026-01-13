@@ -20,7 +20,7 @@ const Login = () => {
 
     try {
       await axios.post(
-        "http://localhost:3002/api/auth/user/login",
+        `${process.env.REACT_APP_API_URL}api/auth/user/login`,
         data,
         { withCredentials: true }
       );

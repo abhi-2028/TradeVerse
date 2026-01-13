@@ -19,7 +19,7 @@ const BuyActionWindow = ({ uid, price }) => {
 
     try {
       await axios.post(
-        "http://localhost:3002/api/user/new-order",
+        `${process.env.REACT_APP_API_URL}api/user/new-order`,
         {
           name: uid,
           qty: Number(stockQuantity),
