@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { apiUrl } from "../../config";
 import "../../styles/auth.css";
 import { useGeneralContext } from "../../context/GeneralContext";
+import server from "../../environment";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,12 +21,12 @@ const Login = () => {
 
     try {
       await axios.post(
-        apiUrl('/api/auth/user/login'),
+        `${server}/api/auth/user/login`,
         data,
         { withCredentials: true }
       );
 
-      // After successful login, fetch and set the user in context so UI updates immediately
+      
       await authUser();
       navigate("/");
     } catch (err) {

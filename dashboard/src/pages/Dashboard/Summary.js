@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { apiUrl } from "../../config";
+import server from "../../environment";
 
 const Summary = () => {
   const [data, setData] = useState(null);
@@ -9,10 +9,7 @@ const Summary = () => {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const res = await axios.get(
-          apiUrl('/api/user/summary'),
-          { withCredentials: true }
-        );
+        const res = await axios.get(`${server}/api/user/summary`, { withCredentials: true });
         setData(res.data);
       } catch (err) {
         console.error(err);

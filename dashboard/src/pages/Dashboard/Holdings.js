@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
-import { apiUrl } from "../../config";
 import { VerticalGraph } from "../../components/Charts/VerticalGraph";
+import server from "../../environment";
 
 const Holdings = () => {
   const [allHoldings, setAllHoldings] = useState([]);
 
   useEffect(() => {
     axios
-      .get(apiUrl('/api/user/holdings'), {
+      .get(`${server}/api/user/holdings`, {
         withCredentials: true,
       })
       .then((res) => {

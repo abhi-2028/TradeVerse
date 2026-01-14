@@ -11,9 +11,8 @@ app.use(cookieParser());
 
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'https://tradeversedashboard.onrender.com',
+  origin: 'http://localhost:3000' || 'https://tradeversedashboard.onrender.com',
   credentials: true,
-  optionsSuccessStatus: 200,
 }));
 
 app.use('/api/auth/user',authRoutes);

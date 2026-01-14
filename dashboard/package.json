@@ -2,7 +2,9 @@
   "name": "dashboard",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://tradeversebackend.onrender.com/",
+  "proxy": {
+    "https://tradeversebackend.onrender.com": "http://localhost:3000"
+  },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",

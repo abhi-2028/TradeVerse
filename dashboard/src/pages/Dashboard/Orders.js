@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { apiUrl } from "../../config";
 import { Link } from "react-router-dom";
+import server from "../../environment";
 
 const Orders = () => {
   const [allOrders, setAllOrders] = useState([]);
 
   useEffect(() => {
-    axios.get(apiUrl('/api/user/orders'),
-      {withCredentials:true}
-    )
+    axios.get(`${server}/api/user/orders`, { withCredentials: true })
       .then((res) => {
         setAllOrders(res.data);
       })

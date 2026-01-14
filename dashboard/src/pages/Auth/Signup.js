@@ -1,10 +1,9 @@
 import React, {useState} from "react";
 import axios from "axios";
-import { apiUrl } from "../../config";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/auth.css";
 import { useGeneralContext } from "../../context/GeneralContext";
-
+import server from "../../environment";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -21,8 +20,10 @@ const Signup = () => {
     const data = Object.fromEntries(formData.entries())
 
     try{
-      await axios.post(apiUrl('/api/auth/user/signup'),
-        data,{withCredentials: true}
+      await axios.post(
+        `${server}/api/auth/user/signup`,
+        data,
+        { withCredentials: true }
       );
 
       authUser();

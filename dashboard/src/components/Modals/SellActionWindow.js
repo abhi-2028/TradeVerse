@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { apiUrl } from "../../config";
 import { useGeneralContext } from "../../context/GeneralContext";
 import "./SellActionWindow.css";
 
@@ -20,7 +19,7 @@ const SellActionWindow = ({ uid, price }) => {
 
     try {
       await axios.post(
-        apiUrl('/api/user/new-order'),
+        "https://tradeversebackend.onrender.com/api/user/new-order",
         {
           name: uid,
           qty: Number(qty),

@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
-
+import server from "../../environment";
 import axios from "axios";
-import { apiUrl } from "../../config";
 
 const Positions = () => {
   const [allPositions, setAllPositions] = useState([]);
 
   useEffect(() => {
-    axios.get(apiUrl('/api/user/positions'),
-      {withCredentials:true}
-    )
+    axios.get(`${server}/api/user/positions`, { withCredentials: true })
     .then((res) => {
       setAllPositions(res.data)
     })
