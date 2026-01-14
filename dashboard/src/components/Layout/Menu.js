@@ -12,7 +12,7 @@ const Menu = () => {
 
   const handleLogout = async () => {
     await logoutUser();
-    navigate("/login", { replace: true });
+    navigate("/", { replace: true });
   };
 
   const menuItems = [
