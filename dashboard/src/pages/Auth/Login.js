@@ -19,6 +19,8 @@ const Login = () => {
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
+    console.log("Login data:", data);
+
     try {
       await axios.post(
         `${server}/api/auth/user/login`,

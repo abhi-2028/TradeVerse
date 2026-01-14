@@ -16,18 +16,22 @@ module.exports.Signup = async (req, res) => {
       username,
       email,
       password,
-    })
+    });
 
-    const token = jwt.sign({
-      id: user._id
-    }, process.env.TOKEN_KEY,
+    const token = jwt.sign(
       {
-        expiresIn: "3d"
-      })
+        id: user._id,
+      },
+      process.env.TOKEN_KEY,
+      {
+        expiresIn: "3d",
+      }
+    );
 
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       path: "/",
     });
 
@@ -60,13 +64,17 @@ module.exports.Login = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    const token = jwt.sign({
-      id: user._id
-    }, process.env.TOKEN_KEY)
+    const token = jwt.sign(
+      {
+        id: user._id,
+      },
+      process.env.TOKEN_KEY
+    );
 
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       path: "/",
     });
 
@@ -75,8 +83,8 @@ module.exports.Login = async (req, res) => {
       user: {
         id: user._id,
         username: user.username,
-        email: user.email
-      }
+        email: user.email,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -88,14 +96,15 @@ module.exports.Logout = (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       path: "/",
     });
 
     res.status(200).json({ message: "Logged out successfully" });
-} catch (error) {
-  return res.status(500).json({ message: "Logout failed" });
-}
+  } catch (error) {
+    return res.status(500).json({ message: "Logout failed" });
+  }
 };
 
 module.exports.VerifyLogin = async (req, res) => {

@@ -1,9 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import axios from "axios";
-import server from "../environment";
-
-// ✅ GLOBAL AXIOS CONFIG (runs once)
-axios.defaults.withCredentials = true;
+import API from "../api/axios";
 
 const GeneralContext = createContext();
 
@@ -19,7 +15,7 @@ export const GeneralProvider = ({ children }) => {
   // 🔐 Verify user on app load
   const verifyUser = async () => {
     try {
-      const res = await axios.get(`${server}/api/auth/user/verify`, { withCredentials: true });
+      const res = await API.get("/api/auth/user/verify");
 
       setUser(res.data.user);
       setIsAuthenticated(true);
@@ -36,22 +32,20 @@ export const GeneralProvider = ({ children }) => {
     verifyUser();
   }, []);
 
-  const authUser = (userData) => {
+  const authUser = async (userData) => {
     if (userData) {
       setUser(userData);
       setIsAuthenticated(true);
       setAuthVerifying(false);
       setLoading(false);
-      return Promise.resolve();
     } else {
-      // If no userData provided, re-verify from server (useful after login)
-      return verifyUser();
+      await verifyUser();
     }
   };
 
   const logoutUser = async () => {
     try {
-      await axios.get(`${server}/api/auth/user/logout`, { withCredentials: true });
+      await API.get("/api/auth/user/logout");
     } catch (err) {
       console.error("Logout failed", err);
     } finally {
