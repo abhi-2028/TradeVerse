@@ -65,7 +65,7 @@ const Menu = () => {
             style={{ cursor: "pointer" }}
           >
             <div className="avatar">{initials}</div>
-            <p className="username">{user.username}</p>
+            <p className="username">{user.username.strip().split()[0].capitalize()}</p>
 
             {isProfileDropdownOpen && (
               <div className="profile-dropdown">
