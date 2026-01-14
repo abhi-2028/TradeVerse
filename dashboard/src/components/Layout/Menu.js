@@ -25,7 +25,9 @@ const Menu = () => {
   ];
 
   const isActive = (path) =>
-    path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
+    path === "/"
+      ? location.pathname === "/"
+      : location.pathname.startsWith(path);
 
   // Safe initials calculation
   const initials =
@@ -65,7 +67,15 @@ const Menu = () => {
             style={{ cursor: "pointer" }}
           >
             <div className="avatar">{initials}</div>
-            <p className="username">{user.username.strip().split()[0].capitalize()}</p>
+            <p className="username">
+              {(() => {
+                const firstName = user.username.trim().split(/\s+/)[0];
+                return (
+                  firstName.charAt(0).toUpperCase() +
+                  firstName.slice(1).toLowerCase()
+                );
+              })()}
+            </p>
 
             {isProfileDropdownOpen && (
               <div className="profile-dropdown">
